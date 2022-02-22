@@ -1,24 +1,36 @@
-import logo from './logo.svg';
 import './App.css';
+import React,{useState,useEffect} from 'react';
+import axios from "axios";
 
 function App() {
+  const [msgs, setmsg] = useState([]);
+  useEffect(()=>{
+    async function getAllMsg(){
+      try{
+        const msgs = await axios.get("http://127.0.0.1:8000/msg/")
+        console.log(msgs.data)
+        setmsg(msgs.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getAllMsg()
+  },[])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+      <div className='layout'>
+        <h4>Healthcheck server result:</h4>
+        <div>
+          {msgs.map(msg =>{
+            return <p>{msg.message}</p>
+          })
+          }
+        </div>
+    
+    
+      </div>
+
+        
   );
 }
 
